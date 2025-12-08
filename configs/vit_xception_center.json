@@ -1,0 +1,43 @@
+{
+    "prefix": "reproduce",
+    "dataset": "OSMA",
+    "memory_size": 1000,
+    "memory_per_class": 200,
+    "fixed_memory": false,
+    "shuffle": false,
+    "init_cls": 1,
+    "increment": 1,
+    "model_name": "disentangle",
+    "convnet_type": "vit_xception_center",
+    "device": ["1"],
+    "seed": [1993],
+    "resize_size": 224,
+    "test_class": [
+    [0,1],
+    [0,1,2],
+    [0,1,2,3],
+    [0,1,2,3,4],
+    [0,1,2,3,4,5],
+    [0,1,2,3,4,5,6],
+    [0,1,2,3,4,5,6,7]
+    ],
+    "trained_path": [
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task0.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task1.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task2.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task3.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task4.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task5.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final/task6.pth"
+    ],
+    "trained_path2": [
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task0.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task1.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task2.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task3.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task4.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task5.pth",
+        "/home/tangshuai/domain_for_open/checkpoints/split2/final_without_R/task6.pth"
+    ]
+}
+
