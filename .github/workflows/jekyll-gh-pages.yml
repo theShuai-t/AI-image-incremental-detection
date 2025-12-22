@@ -39,6 +39,11 @@ jobs:
         run: |
           META_TAG='<meta name="google-site-verification" content="F9l1bxG5y0vAVV0ZmicT_heMUN8xpvGa13Gx0xXNI3o" />'
           find ./_site -name "*.html" -exec sudo sed -i "s|</head>|$META_TAG\n</head>|g" {} +
+      
+      - name: Inject Edge Site Verification Meta Tag
+        run: |
+          META_TAG='<meta name="msvalidate.01" content="381E84BDF43CCD03833EBCBB60EE57B3" />'
+          find ./_site -name "*.html" -exec sudo sed -i "s|</head>|$META_TAG\n</head>|g" {} +
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
