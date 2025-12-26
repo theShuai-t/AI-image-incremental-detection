@@ -1,4 +1,4 @@
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Deploy Jekyll with meta injected
 
 on:
   push:
@@ -17,44 +17,62 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+      # 1️⃣ 安装 Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          source: ./
-          destination: ./_site
+          ruby-version: "3.2"
+          bundler-cache: true
 
-      # ✅ 安全注入 Google + Bing / Edge 验证 meta
+      # 2️⃣ 安装依赖（兼容 GitHub Pages）
+      - name: Install dependencies
+        run: |
+          if [ -f Gemfile ]; then
+            bundle install
+          else
+            gem install github-pages
+          fi
+
+      # 3️⃣ 正常构建（_site 是可写的）
+      - name: Build Jekyll
+        run: bundle exec jekyll build
+
+      # 4️⃣ 注入 Google / Bing meta（现在不会 Permission denied）
       - name: Inject Site Verification Meta Tags
         run: |
           GOOGLE='<meta name="google-site-verification" content="F9l1bxG5y0vAVV0ZmicT_heMUN8xpvGa13Gx0xXNI3o" />'
           BING='<meta name="msvalidate.01" content="381E84BDF43CCD03833EBCBB60EE57B3" />'
 
-          find ./_site -name "*.html" | while read -r file; do
-            if ! grep -q "google-site-verification" "$file"; then
+          find _site -name "*.html" | while read -r file; do
+            grep -q "google-site-verification" "$file" || \
               sed -i "s|</head>|$GOOGLE\n</head>|" "$file"
-            fi
 
-            if ! grep -q "msvalidate.01" "$file"; then
+            grep -q "msvalidate.01" "$file" || \
               sed -i "s|</head>|$BING\n</head>|" "$file"
-            fi
           done
 
+      # 5️⃣ 配置 Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 6️⃣ 上传构建产物
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
