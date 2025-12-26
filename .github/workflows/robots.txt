@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://theshuai-t.github.io/AI-image-incremental-detection/sitemap.xml
